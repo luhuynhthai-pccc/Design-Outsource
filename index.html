@@ -1,29 +1,118 @@
-<h2>Test Phiếu Chào Giá</h2>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Test Phiếu Yêu Cầu Chào Giá</title>
 
-<input id="project" placeholder="Tên dự án">
-<input id="outsource" placeholder="Đơn vị outsource">
-<input id="value" type="number" placeholder="Giá trị">
+<style>
+body{
+    font-family: Arial, sans-serif;
+    max-width: 700px;
+    margin: 40px auto;
+    padding: 20px;
+    background:#f5f5f5;
+}
 
-<button onclick="saveRequest()">Lưu</button>
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 2px 10px rgba(0,0,0,.1);
+}
+
+input{
+    width:100%;
+    padding:10px;
+    margin:8px 0;
+    border:1px solid #ccc;
+    border-radius:6px;
+    box-sizing:border-box;
+}
+
+button{
+    background:#0F52BA;
+    color:white;
+    border:none;
+    padding:12px 20px;
+    border-radius:6px;
+    cursor:pointer;
+}
+
+button:hover{
+    opacity:.9;
+}
+
+#result{
+    margin-top:15px;
+    padding:10px;
+    border-radius:6px;
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+    <h2>Phiếu Yêu Cầu Chào Giá</h2>
+
+    <input id="project" placeholder="Tên dự án">
+
+    <input id="outsource" placeholder="Đơn vị outsource">
+
+    <input id="value" type="number" placeholder="Giá trị báo giá">
+
+    <button onclick="saveRequest()">Lưu dữ liệu</button>
+
+    <div id="result"></div>
+</div>
 
 <script>
 async function saveRequest() {
+
     const data = {
         project_name: document.getElementById("project").value,
         outsource_name: document.getElementById("outsource").value,
-        quotation_value: Number(document.getElementById("value").value)
+        quotation_value: Number(
+            document.getElementById("value").value
+        )
     };
 
-    const response = await fetch("/api/save-request", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data)
-    });
+    try {
 
-    const result = await response.json();
+        const response = await fetch("/api/save-request", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
 
-    alert(result.message);
+        const result = await response.json();
+
+        const box = document.getElementById("result");
+
+        box.style.display = "block";
+        box.style.background = "#d1fae5";
+        box.innerHTML =
+            "✅ Lưu thành công: " +
+            JSON.stringify(result);
+
+    } catch (error) {
+
+        const box = document.getElementById("result");
+
+        box.style.display = "block";
+        box.style.background = "#fee2e2";
+        box.innerHTML =
+            "❌ Lỗi kết nối API: " +
+            error.message;
+
+        console.error(error);
+    }
 }
 </script>
+
+</body>
+</html>
