@@ -1,9 +1,29 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Design Outsource</title>
-</head>
-<body>
-    <h1>Hello World</h1>
-</body>
-</html>
+<h2>Test Phiếu Chào Giá</h2>
+
+<input id="project" placeholder="Tên dự án">
+<input id="outsource" placeholder="Đơn vị outsource">
+<input id="value" type="number" placeholder="Giá trị">
+
+<button onclick="saveRequest()">Lưu</button>
+
+<script>
+async function saveRequest() {
+    const data = {
+        project_name: document.getElementById("project").value,
+        outsource_name: document.getElementById("outsource").value,
+        quotation_value: Number(document.getElementById("value").value)
+    };
+
+    const response = await fetch("/api/save-request", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    });
+
+    const result = await response.json();
+
+    alert(result.message);
+}
+</script>
