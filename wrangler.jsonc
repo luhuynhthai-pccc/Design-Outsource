@@ -2,7 +2,16 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "design-outsource",
   "compatibility_date": "2026-06-16",
+
   "assets": {
     "directory": "."
-  }
+  },
+
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "design_outsource",
+      "database_id": "62862773-7131-4c4c-9116-e9a3677cf3ce"
+    }
+  ]
 }
