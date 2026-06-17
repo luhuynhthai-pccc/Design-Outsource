@@ -3,114 +3,1059 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Test Phiếu Yêu Cầu Chào Giá</title>
+<title>Phiếu Yêu Cầu Chào Giá Thiết Kế PCCC — Nam Lợi Phát</title>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/SheetJS/0.18.5/xlsx.full.min.js"></script>
 
 <style>
+:root{
+  --navy: #045D84;
+  --navy-deep: #033C56;
+  --navy-pale: #EAF3F7;
+  --gold: #CE932A;
+  --gold-dark: #A1721E;
+  --gold-pale: #FCF3E2;
+  --ink: #1C2226;
+  --ink-soft: #51606A;
+  --line: #D6E2E8;
+  --paper: #FFFFFF;
+  --bg: #EFF4F6;
+  --danger: #B23A2E;
+  --radius: 6px;
+}
+
+*{ box-sizing: border-box; }
+
 body{
-    font-family: Arial, sans-serif;
-    max-width: 700px;
-    margin: 40px auto;
-    padding: 20px;
-    background:#f5f5f5;
+  margin:0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: "IBM Plex Sans", "Segoe UI", Arial, sans-serif;
+  font-size: 13.5px;
+  line-height: 1.55;
+}
+
+/* ===================== MASTHEAD ===================== */
+.masthead{
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.masthead-inner{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 22px 36px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 24px;
+  flex-wrap: wrap;
+}
+.brand{
+  display:flex;
+  align-items:center;
+  gap: 14px;
+}
+.brand img{
+  height: 58px;
+  width: auto;
+  display:block;
+}
+.brand-divider{
+  width: 1px;
+  height: 44px;
+  background: var(--line);
+}
+.system-title{
+  text-align: right;
+}
+.system-title h1{
+  margin:0;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  letter-spacing: 0.3px;
+}
+.system-title p{
+  margin: 3px 0 0;
+  font-size: 11.5px;
+  color: var(--gold-dark);
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+}
+
+/* ===================== HEADER BAND (navy) ===================== */
+.header-band{
+  background: linear-gradient(120deg, var(--navy-deep) 0%, var(--navy) 55%, #0A6E97 100%);
+  color: #fff;
+  position: relative;
+  overflow: hidden;
+}
+.header-band::before{
+  content:"";
+  position:absolute;
+  left: -80px; bottom: -100px;
+  width: 280px; height: 280px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(206,147,42,0.18), transparent 70%);
+}
+.header-band-inner{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 22px 36px;
+  display:flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 20px;
+  flex-wrap: wrap;
+  position: relative;
+  z-index: 1;
+}
+.company-block .company-name{
+  margin:0;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.4px;
+}
+.company-block .company-tagline{
+  margin: 3px 0 8px;
+  font-size: 10.5px;
+  color: var(--gold);
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.company-block .company-contact{
+  margin:0;
+  font-size: 11.5px;
+  color: #CFE3EC;
+}
+.doc-block{
+  text-align: right;
+}
+.doc-block .doc-title{
+  margin:0;
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  letter-spacing: 0.3px;
+}
+.doc-block .doc-meta-row{
+  margin: 6px 0 0;
+  font-size: 11.5px;
+  color: #CFE3EC;
+}
+.doc-block .doc-meta-row b{
+  color: #fff;
+  font-weight: 600;
+}
+
+/* ===================== PAGE ===================== */
+.page{
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 26px 36px 80px;
+}
+
+.toolbar{
+  display:flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+.btn{
+  border:none;
+  border-radius: var(--radius);
+  padding: 10px 18px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  display:inline-flex;
+  align-items:center;
+  gap: 7px;
+  transition: transform .12s ease, box-shadow .12s ease;
+}
+.btn:hover{ transform: translateY(-1px); }
+.btn-gold{
+  background: var(--gold);
+  color: #fff;
+  box-shadow: 0 2px 0 var(--gold-dark);
+}
+.btn-gold:hover{ box-shadow: 0 4px 10px rgba(206,147,42,0.35); }
+.btn-navy{
+  background: var(--navy);
+  color: #fff;
+  box-shadow: 0 2px 0 var(--navy-deep);
+}
+.btn-navy:hover{ box-shadow: 0 4px 10px rgba(4,93,132,0.35); }
+.btn-ghost{
+  background: transparent;
+  color: var(--ink-soft);
+  border: 1px solid var(--line);
+}
+.btn-ghost:hover{ background: #fff; }
+
+/* ===================== SECTION ===================== */
+.section{
+  margin-bottom: 26px;
+}
+.section-head{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+  margin-bottom: 14px;
+  padding-bottom: 8px;
+  border-bottom: 2.5px solid var(--navy);
+}
+.section-head .roman{
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--navy-deep);
+  letter-spacing: 0.3px;
+  text-transform: uppercase;
 }
 
 .card{
-    background:white;
-    padding:20px;
-    border-radius:12px;
-    box-shadow:0 2px 10px rgba(0,0,0,.1);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(4,93,132,0.05);
 }
 
-input{
-    width:100%;
-    padding:10px;
-    margin:8px 0;
-    border:1px solid #ccc;
-    border-radius:6px;
-    box-sizing:border-box;
+/* ===== Key-value info table (Section I style) ===== */
+.kv-table{
+  width: 100%;
+  border-collapse: collapse;
+}
+.kv-table tr{ border-bottom: 1px solid var(--line); }
+.kv-table tr:last-child{ border-bottom: none; }
+.kv-table td{
+  padding: 11px 16px;
+  vertical-align: top;
+}
+.kv-table td.kv-label{
+  width: 220px;
+  background: var(--navy-pale);
+  font-weight: 600;
+  color: var(--navy-deep);
+  font-size: 12.5px;
+  border-right: 1px solid var(--line);
+}
+.kv-table td.kv-value input,
+.kv-table td.kv-value textarea{
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 13.5px;
+  font-family: inherit;
+  color: var(--ink);
+  padding: 2px 0;
+}
+.kv-table td.kv-value textarea{ resize: vertical; min-height: 40px; }
+.kv-table td.kv-value input:focus,
+.kv-table td.kv-value textarea:focus{
+  outline: none;
+  background: var(--gold-pale);
+  border-radius: 4px;
+  padding: 4px 6px;
+  margin: -2px -6px;
+}
+.kv-split{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+}
+.kv-split > div{ border-right: 1px solid var(--line); }
+.kv-split > div:last-child{ border-right: none; }
+@media (max-width: 700px){
+  .kv-split{ grid-template-columns: 1fr; }
+  .kv-split > div{ border-right: none; border-bottom: 1px solid var(--line); }
 }
 
-button{
-    background:#0F52BA;
-    color:white;
-    border:none;
-    padding:12px 20px;
-    border-radius:6px;
-    cursor:pointer;
+/* ===== Section II overview table ===== */
+.overview-table{
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 760px;
+}
+.overview-table thead th{
+  background: var(--navy);
+  color: #fff;
+  font-size: 11.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+  padding: 11px 14px;
+  text-align: left;
+}
+.overview-table thead th.stt-col{ width: 48px; text-align: center; }
+.overview-table thead th.sys-col{ width: 230px; }
+.overview-table tbody td{
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.overview-table tbody tr:nth-child(even) td{ background: var(--navy-pale); }
+.overview-table td.stt-col{
+  text-align: center;
+  font-weight: 700;
+  color: var(--gold-dark);
+}
+.overview-table td.sys-name{
+  font-weight: 600;
+  color: var(--navy-deep);
+}
+.overview-table td input, .overview-table td textarea{
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--ink);
+  resize: vertical;
+}
+.overview-table td textarea{ min-height: 42px; }
+.overview-table td input:focus, .overview-table td textarea:focus{
+  outline:none;
+  background: var(--gold-pale);
+  border-radius: 4px;
+  padding: 3px 5px;
+  margin: -3px -5px;
+}
+.table-scroll{ overflow-x: auto; }
+
+.intro-note{
+  font-size: 12px;
+  color: var(--ink-soft);
+  font-style: italic;
+  margin: 0 0 10px;
 }
 
-button:hover{
-    opacity:.9;
+/* ===== Section III pricing tables ===== */
+.pricing-system{
+  margin-bottom: 10px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  overflow: hidden;
+}
+.pricing-system:last-child{ margin-bottom: 0; }
+.pricing-system.is-open{ margin-bottom: 14px; }
+
+.pricing-head{
+  background: var(--navy-pale);
+  padding: 12px 16px;
+  display:flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  cursor: pointer;
+  user-select: none;
+  transition: background .15s;
+}
+.pricing-head:hover{ background: #DCEBF1; }
+.pricing-system.is-open .pricing-head{
+  border-bottom: 1px solid var(--line);
+}
+.pricing-head .pname{
+  display:flex;
+  align-items:center;
+  gap: 10px;
+}
+.pricing-head .pname .badge{
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  background: var(--gold);
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  flex-shrink:0;
+}
+.pricing-head .pname h4{
+  margin:0;
+  font-size: 14px;
+  color: var(--navy-deep);
+}
+.pricing-head .head-right{
+  display:flex;
+  align-items:center;
+  gap: 16px;
+}
+.pricing-head .head-subtotal{
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--gold-dark);
+  white-space: nowrap;
+}
+.pricing-head .head-subtotal .label{
+  font-size: 10.5px;
+  font-weight: 600;
+  color: var(--ink-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  margin-right: 6px;
+}
+.pricing-head .chevron{
+  width: 22px; height: 22px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  color: var(--navy-deep);
+  transition: transform .2s;
+  flex-shrink: 0;
+}
+.pricing-system.is-open .chevron{ transform: rotate(180deg); }
+
+.pricing-body{
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .25s ease;
+}
+.pricing-system.is-open .pricing-body{
+  max-height: none;
+}
+.note-row{
+  padding: 10px 16px;
+  background: var(--gold-pale);
+  border-bottom: 1px solid var(--line);
+}
+.note-row label{
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gold-dark);
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  display:block;
+  margin-bottom: 4px;
+}
+.note-row textarea{
+  width: 100%;
+  border: 1px dashed var(--gold);
+  border-radius: 4px;
+  background: #fff;
+  padding: 8px 10px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--ink);
+  min-height: 44px;
+  resize: vertical;
+}
+.note-row textarea:focus{ outline:none; border-style: solid; }
+
+table.items{
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+table.items thead th{
+  background: var(--navy-deep);
+  color: #fff;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+  font-weight: 600;
+  padding: 9px 11px;
+  text-align: left;
+  white-space: nowrap;
+}
+table.items thead th.col-action{ width: 40px; }
+table.items tbody td{
+  padding: 5px 7px;
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+table.items tbody tr:nth-child(even) td{ background: #F7FAFC; }
+table.items td input{
+  width: 100%;
+  border: none;
+  background: transparent;
+  padding: 7px 6px;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--ink);
+  border-radius: 4px;
+}
+table.items td input:focus{
+  outline: none;
+  background: var(--gold-pale);
+  box-shadow: 0 0 0 1.5px var(--gold);
+}
+table.items td.col-area input, table.items td.col-price input{ text-align: right; }
+table.items td.col-total{
+  text-align: right;
+  font-weight: 600;
+  color: var(--navy-deep);
+  white-space: nowrap;
+  padding-right: 12px;
+}
+.row-del{
+  width: 24px; height: 24px;
+  border-radius: 5px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--danger);
+  cursor: pointer;
+  font-size: 13px;
+  line-height: 1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+.row-del:hover{ background: #FBEAE8; border-color: var(--danger); }
+tfoot td{
+  padding: 10px 11px;
+  font-weight: 700;
+  background: var(--gold-pale);
+  border-top: 2px solid var(--gold);
+  color: var(--navy-deep);
+}
+tfoot td.col-total{ text-align:right; }
+
+.add-row-btn{
+  margin: 10px 0 14px 14px;
+  font-size: 12px;
+  padding: 7px 14px;
 }
 
-#result{
-    margin-top:15px;
-    padding:10px;
-    border-radius:6px;
-    display:none;
+/* ===== Grand total ===== */
+.grand-total-card{
+  background: linear-gradient(120deg, var(--navy-deep), var(--navy));
+  border-radius: 8px;
+  padding: 18px 24px;
+  display:flex;
+  justify-content: space-between;
+  align-items:center;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: #fff;
+}
+.grand-total-card .label{
+  font-size: 12.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  color: #CFE3EC;
+  font-weight: 600;
+}
+.grand-total-card .value{
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--gold);
+}
+
+/* ===== Signature ===== */
+.sign-grid{
+  display:grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  text-align: center;
+}
+.sign-box{
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  padding: 16px 12px 56px;
+}
+.sign-box .role{
+  font-weight: 700;
+  font-size: 12.5px;
+  color: var(--navy-deep);
+  margin: 0 0 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.4px;
+}
+.sign-box .hint{
+  font-size: 11px;
+  color: var(--ink-soft);
+  margin:0;
+}
+
+.footnote{
+  font-size: 11px;
+  color: var(--ink-soft);
+  text-align:center;
+  margin-top: 24px;
+}
+
+@media print{
+  .toolbar{ display:none; }
+}
+
+@media (max-width: 720px){
+  .masthead-inner, .header-band-inner, .page{ padding-left: 18px; padding-right: 18px; }
+  .system-title{ text-align: left; }
+  .doc-block{ text-align: left; }
+  .header-band-inner{ flex-direction: column; }
+  .kv-table td.kv-label{ width: 150px; font-size: 11.5px; }
 }
 </style>
 </head>
-
 <body>
 
-<div class="card">
-    <h2>Phiếu Yêu Cầu Chào Giá</h2>
+<div class="masthead">
+  <div class="masthead-inner">
+    <div class="brand">
+      <img src="assets/logo.png" alt="Nam Lợi Phát">
+      <div class="brand-divider"></div>
+    </div>
+    <div class="system-title">
+      <h1>HỆ THỐNG QUẢN LÝ PCCC</h1>
+      <p>Nền tảng khái toán thi công &amp; quản lý thiết kế Outsource</p>
+    </div>
+  </div>
+</div>
 
-    <input id="project" placeholder="Tên dự án">
+<div class="header-band">
+  <div class="header-band-inner">
+    <div class="company-block">
+      <p class="company-name">CÔNG TY TNHH NAM LỢI PHÁT</p>
+      <p class="company-tagline">Our Solutions · Your Success</p>
+      <p class="company-contact">ĐT: 028.XXXX.XXXX &nbsp;|&nbsp; Email: info@namloiphat.com</p>
+    </div>
+    <div class="doc-block">
+      <p class="doc-title">PHIẾU YÊU CẦU CHÀO GIÁ THIẾT KẾ</p>
+      <p class="doc-meta-row">Mã yêu cầu: <b><input style="background:transparent;border:none;color:#fff;font-weight:600;width:140px;font-size:11.5px;font-family:inherit;" id="rfq-no" placeholder="PYC-2026-NLP-XXX"></b></p>
+      <p class="doc-meta-row">Ngày lập: <b><input type="date" style="background:transparent;border:none;color:#fff;font-weight:600;width:120px;font-size:11.5px;font-family:inherit;" id="rfq-date"></b></p>
+    </div>
+  </div>
+</div>
 
-    <input id="outsource" placeholder="Đơn vị outsource">
+<div class="page" id="capture-area">
 
-    <input id="value" type="number" placeholder="Giá trị báo giá">
+  <div class="toolbar">
+    <button class="btn btn-ghost" onclick="resetForm()">↺ Làm mới</button>
+    <button class="btn btn-navy" onclick="exportExcel()">⤓ Xuất Excel</button>
+    <button class="btn btn-gold" onclick="exportPDF()">⤓ Xuất PDF</button>
+  </div>
 
-    <button onclick="saveRequest()">Lưu dữ liệu</button>
+  <!-- ===== I. THÔNG TIN CÔNG TRÌNH ===== -->
+  <section class="section">
+    <div class="section-head"><span class="roman">I. Thông tin công trình &amp; quy mô thiết kế</span></div>
+    <div class="card">
+      <table class="kv-table">
+        <tr>
+          <td class="kv-label">Tên dự án</td>
+          <td class="kv-value"><input type="text" id="project-name" placeholder="VD: Tòa nhà hỗn hợp văn phòng và dịch vụ thương mại"></td>
+        </tr>
+        <tr>
+          <td class="kv-label">Công năng sử dụng</td>
+          <td class="kv-value"><input type="text" id="project-function" placeholder="VD: Văn phòng làm việc kết hợp trung tâm thương mại"></td>
+        </tr>
+        <tr>
+          <td class="kv-label">Địa điểm</td>
+          <td class="kv-value"><input type="text" id="project-address" placeholder="VD: Khu đô thị mới, TP. Đà Nẵng, Việt Nam"></td>
+        </tr>
+        <tr>
+          <td class="kv-label">Quy mô xây dựng</td>
+          <td class="kv-value">
+            <div class="kv-split" style="grid-template-columns: 1fr 1fr; margin: -2px -6px;">
+              <div style="padding: 2px 6px;">Diện tích sàn thi công: <input type="text" id="project-area" placeholder="0 m²" style="width: 110px; display:inline; font-weight:600;"></div>
+              <div style="padding: 2px 6px;">Số tầng: <input type="text" id="project-floors" placeholder="0 tầng" style="width: 90px; display:inline; font-weight:600;"></div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="kv-label">Yêu cầu công việc</td>
+          <td class="kv-value"><textarea id="project-scope" placeholder="Thiết kế bản vẽ thi công, thuyết minh kỹ thuật, bóc tách khối lượng vật tư chi tiết phục vụ đấu thầu và hỗ trợ chỉnh sửa hồ sơ cho đến khi có Giấy chứng nhận thẩm duyệt thiết kế PCCC."></textarea></td>
+        </tr>
+      </table>
+    </div>
+  </section>
 
-    <div id="result"></div>
+  <!-- ===== II. CÁC HẠNG MỤC HỆ THỐNG ===== -->
+  <section class="section">
+    <div class="section-head"><span class="roman">II. Các hạng mục hệ thống PCCC yêu cầu thiết kế</span></div>
+    <p class="intro-note">Đơn vị tư vấn thiết kế vui lòng căn cứ vào các hạng mục được yêu cầu dưới đây để lên phương án thiết kế kỹ thuật chi tiết:</p>
+    <div class="card table-scroll">
+      <table class="overview-table">
+        <thead>
+          <tr>
+            <th class="stt-col">STT</th>
+            <th class="sys-col">Hệ thống kỹ thuật yêu cầu thiết kế</th>
+            <th>Nội dung chi tiết phạm vi công việc tối thiểu</th>
+          </tr>
+        </thead>
+        <tbody id="overview-body"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- ===== III. ĐỀ XUẤT CHI PHÍ ===== -->
+  <section class="section">
+    <div class="section-head"><span class="roman">III. Đề xuất chi phí từ đối tác thiết kế (Outsource điền)</span></div>
+    <p class="intro-note">Đối tác vui lòng điền vị trí, diện tích và đơn giá đề xuất cho từng hạng mục. Hệ thống sẽ tự động tính thành tiền.</p>
+    <div id="systems-container"></div>
+  </section>
+
+  <!-- ===== IV. TỔNG HỢP GIÁ TRỊ ===== -->
+  <section class="section">
+    <div class="section-head"><span class="roman">IV. Tổng hợp giá trị đề xuất</span></div>
+    <div class="grand-total-card">
+      <span class="label">Tổng giá trị đề xuất (VNĐ)</span>
+      <span class="value" id="grand-total-value">0</span>
+    </div>
+  </section>
+
+  <!-- ===== V. XÁC NHẬN ===== -->
+  <section class="section">
+    <div class="section-head"><span class="roman">V. Xác nhận</span></div>
+    <div class="card" style="padding: 22px 20px;">
+      <div class="sign-grid">
+        <div class="sign-box">
+          <p class="role">Đại diện Nam Lợi Phát</p>
+          <p class="hint">Ký, ghi rõ họ tên</p>
+        </div>
+        <div class="sign-box">
+          <p class="role">Đại diện đơn vị chào giá</p>
+          <p class="hint">Ký, ghi rõ họ tên</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <p class="footnote">Phiếu này được lập bởi Công ty TNHH Nam Lợi Phát nhằm mục đích thu thập chào giá thiết kế outsource. Số liệu mang tính tham khảo, giá trị chính thức căn cứ theo hợp đồng/báo giá chính thức được ký kết.</p>
+
 </div>
 
 <script>
-async function saveRequest() {
+/* ===================== DATA MODEL ===================== */
+const SYSTEMS = [
+  {
+    id: "bao-chay",
+    title: "Hệ thống Báo cháy tự động",
+    overview: "Thiết kế tủ trung tâm điều khiển báo cháy, bản vẽ chi tiết bố trí đầu báo khói/nhiệt, nút nhấn khẩn cấp, hệ thống đường dây cấp tín hiệu, chuông còi đèn chớp báo động và lập phương án liên động thiết bị khác.",
+    rows: 3
+  },
+  {
+    id: "chua-chay",
+    title: "Hệ thống Chữa cháy",
+    overview: "Thiết kế mạng đường ống chữa cháy Sprinkler tự động, cụm van điều khiển (Alarm Valve), hệ thống họng nước chữa cháy vách tường, tính toán thủy lực chọn công suất trạm bơm nước chữa cháy.",
+    rows: 3
+  },
+  {
+    id: "exit-den",
+    title: "Hệ thống Exit, Đèn sự cố &amp; CDTN",
+    overview: "Bố trí đèn chỉ dẫn lối thoát hiểm (Exit), đèn chiếu sáng sự cố khi mất điện, thiết kế hướng dẫn sơ đồ thoát nạn theo tiêu chuẩn quy định và an toàn thoát nạn cùa Bộ Xây dựng.",
+    rows: 2
+  },
+  {
+    id: "cap-dien",
+    title: "Hệ thống Cấp điện PCCC",
+    overview: "Thiết kế sơ đồ nguyên lý từ điện phân phối ưu tiên dành riêng cho PCCC (bơm nước, quạt tăng áp, tủ báo cháy), cấp nguồn chống cháy và liên động ngắt nguồn điện khu vực khi có sự cố.",
+    rows: 2
+  },
+  {
+    id: "tang-ap-thoat-khoi",
+    title: "Hệ thống Tăng áp &amp; Thoát khói",
+    overview: "Thiết kế hệ thống quạt hút khói hành lang, hệ thống quạt tăng áp buồng thang bộ thoát hiểm, đường ống gió cách nhiệt, van ngăn lửa khói (MFD) hoạt động liên động khi có tín hiệu báo cháy.",
+    rows: 2
+  }
+];
 
-    const data = {
-        project_name: document.getElementById("project").value,
-        outsource_name: document.getElementById("outsource").value,
-        quotation_value: Number(
-            document.getElementById("value").value
-        )
-    };
+const COLS = [
+  { key: "location", label: "Vị trí", placeholder: "VD: Tầng 1 - Khu A" },
+  { key: "area",     label: "Diện tích (m²)", placeholder: "0", type: "number", cls: "col-area" },
+  { key: "price",    label: "Đơn giá đề xuất (VNĐ/m²)", placeholder: "0", type: "number", cls: "col-price" },
+  { key: "note",     label: "Ghi chú yêu cầu", placeholder: "Mô tả công việc cần làm..." }
+];
 
-    try {
+const ROMAN_2 = ["1","2","3","4","5","6","7","8"];
 
-        const response = await fetch("/api/save-request", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+/* ===================== RENDER: SECTION II overview ===================== */
+const overviewBody = document.getElementById("overview-body");
+SYSTEMS.forEach((sys, i) => {
+  const tr = document.createElement("tr");
+  tr.innerHTML = `
+    <td class="stt-col">${i + 1}</td>
+    <td class="sys-name">${sys.title}</td>
+    <td><textarea data-sys="${sys.id}" class="overview-text">${sys.overview}</textarea></td>
+  `;
+  overviewBody.appendChild(tr);
+});
 
-        const result = await response.json();
+/* ===================== RENDER: SECTION III pricing ===================== */
+const container = document.getElementById("systems-container");
 
-        const box = document.getElementById("result");
+function formatNumber(n){
+  if (isNaN(n)) return "0";
+  return Math.round(n).toLocaleString("vi-VN");
+}
 
-        box.style.display = "block";
-        box.style.background = "#d1fae5";
-        box.innerHTML =
-            "✅ Lưu thành công: " +
-            JSON.stringify(result);
+function buildRow(sysId, idx){
+  const tr = document.createElement("tr");
+  tr.dataset.row = idx;
 
-    } catch (error) {
-
-        const box = document.getElementById("result");
-
-        box.style.display = "block";
-        box.style.background = "#fee2e2";
-        box.innerHTML =
-            "❌ Lỗi kết nối API: " +
-            error.message;
-
-        console.error(error);
+  COLS.forEach(col => {
+    const td = document.createElement("td");
+    if (col.cls) td.className = col.cls;
+    const input = document.createElement("input");
+    input.type = col.type || "text";
+    if (col.type === "number") input.min = "0";
+    input.placeholder = col.placeholder || "";
+    input.dataset.field = col.key;
+    if (col.key === "area" || col.key === "price"){
+      input.addEventListener("input", () => updateRowTotal(sysId, tr));
     }
+    td.appendChild(input);
+    tr.appendChild(td);
+  });
+
+  const tdTotal = document.createElement("td");
+  tdTotal.className = "col-total";
+  tdTotal.textContent = "0";
+  tr.appendChild(tdTotal);
+
+  const tdDel = document.createElement("td");
+  tdDel.className = "col-action";
+  const delBtn = document.createElement("button");
+  delBtn.className = "row-del";
+  delBtn.type = "button";
+  delBtn.innerHTML = "✕";
+  delBtn.title = "Xóa dòng";
+  delBtn.addEventListener("click", () => {
+    tr.remove();
+    updateSystemSubtotal(sysId);
+  });
+  tdDel.appendChild(delBtn);
+  tr.appendChild(tdDel);
+
+  return tr;
+}
+
+function updateRowTotal(sysId, tr){
+  const area = parseFloat(tr.querySelector('[data-field="area"]').value) || 0;
+  const price = parseFloat(tr.querySelector('[data-field="price"]').value) || 0;
+  const total = area * price;
+  tr.querySelector(".col-total").textContent = formatNumber(total);
+  updateSystemSubtotal(sysId);
+}
+
+function updateSystemSubtotal(sysId){
+  const table = document.getElementById(`table-${sysId}`);
+  let sum = 0;
+  table.querySelectorAll("tbody tr").forEach(tr => {
+    const area = parseFloat(tr.querySelector('[data-field="area"]')?.value) || 0;
+    const price = parseFloat(tr.querySelector('[data-field="price"]')?.value) || 0;
+    sum += area * price;
+  });
+  const subtotalEl = document.getElementById(`subtotal-${sysId}`);
+  if (subtotalEl) subtotalEl.textContent = formatNumber(sum);
+  updateGrandTotal();
+}
+
+function updateGrandTotal(){
+  let grand = 0;
+  SYSTEMS.forEach(sys => {
+    const el = document.getElementById(`subtotal-${sys.id}`);
+    if (el) grand += parseFloat(el.textContent.replace(/\./g, "").replace(/,/g, "")) || 0;
+  });
+  document.getElementById("grand-total-value").textContent = formatNumber(grand);
+}
+
+function addRow(sysId){
+  const tbody = document.querySelector(`#table-${sysId} tbody`);
+  const idx = tbody.children.length;
+  tbody.appendChild(buildRow(sysId, idx));
+}
+
+function renderSystem(sys, index){
+  const section = document.createElement("div");
+  section.className = "pricing-system";
+  if (index === 0) section.classList.add("is-open");
+
+  section.innerHTML = `
+    <div class="pricing-head" data-toggle="${sys.id}">
+      <div class="pname">
+        <span class="badge">${index + 1}</span>
+        <h4>${sys.title}</h4>
+      </div>
+      <div class="head-right">
+        <span class="head-subtotal"><span class="label">Tạm tính</span><span id="subtotal-${sys.id}">0</span> đ</span>
+        <span class="chevron">▾</span>
+      </div>
+    </div>
+    <div class="pricing-body">
+      <div class="note-row">
+        <label>Note — Hệ thống cần làm gì</label>
+        <textarea id="note-${sys.id}" placeholder="Ghi rõ phạm vi công việc, hạng mục cần outsource, yêu cầu kỹ thuật riêng cho hệ thống này..."></textarea>
+      </div>
+      <div class="table-scroll">
+        <table class="items" id="table-${sys.id}">
+          <thead>
+            <tr>
+              ${COLS.map(c => `<th>${c.label}</th>`).join("")}
+              <th>Thành tiền (VNĐ)</th>
+              <th class="col-action"></th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <button type="button" class="btn btn-ghost add-row-btn" data-sys="${sys.id}">+ Thêm vị trí</button>
+    </div>
+  `;
+
+  container.appendChild(section);
+
+  const tbody = section.querySelector(`#table-${sys.id} tbody`);
+  for (let i = 0; i < sys.rows; i++){
+    tbody.appendChild(buildRow(sys.id, i));
+  }
+
+  section.querySelector(".add-row-btn").addEventListener("click", (e) => {
+    e.stopPropagation();
+    addRow(sys.id);
+  });
+
+  section.querySelector(".pricing-head").addEventListener("click", () => {
+    section.classList.toggle("is-open");
+  });
+
+  // prevent clicks inside the body from toggling the accordion
+  section.querySelector(".pricing-body").addEventListener("click", (e) => {
+    e.stopPropagation();
+  });
+}
+
+SYSTEMS.forEach((sys, i) => renderSystem(sys, i));
+
+document.getElementById("rfq-date").value = new Date().toISOString().slice(0,10);
+
+/* ===================== RESET ===================== */
+function resetForm(){
+  if (!confirm("Bạn có chắc muốn làm mới toàn bộ phiếu? Dữ liệu đã nhập sẽ mất.")) return;
+  document.querySelectorAll('.page input, .page textarea').forEach(el => {
+    if (el.classList.contains('overview-text')) return; // keep default overview text
+    el.value = "";
+  });
+  document.querySelectorAll('.col-total').forEach(el => el.textContent = "0");
+  document.getElementById("grand-total-value").textContent = "0";
+  document.getElementById("rfq-date").value = new Date().toISOString().slice(0,10);
+}
+
+/* ===================== EXPORT: PDF ===================== */
+async function exportPDF(){
+  const hideEls = document.querySelectorAll('.row-del, .add-row-btn, .toolbar');
+  hideEls.forEach(b => b.style.visibility = "hidden");
+
+  const target = document.getElementById("capture-area");
+  const canvas = await html2canvas(target, { scale: 2, backgroundColor: "#EFF4F6" });
+  hideEls.forEach(b => b.style.visibility = "visible");
+
+  const imgData = canvas.toDataURL("image/jpeg", 0.95);
+  const { jsPDF } = window.jspdf;
+  const pdf = new jsPDF("p", "mm", "a4");
+  const pageWidth = pdf.internal.pageSize.getWidth();
+  const pageHeight = pdf.internal.pageSize.getHeight();
+
+  const imgWidth = pageWidth;
+  const imgHeight = (canvas.height * imgWidth) / canvas.width;
+
+  let heightLeft = imgHeight;
+  let position = 0;
+
+  pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+  heightLeft -= pageHeight;
+
+  while (heightLeft > 0){
+    position = heightLeft - imgHeight;
+    pdf.addPage();
+    pdf.addImage(imgData, "JPEG", 0, position, imgWidth, imgHeight);
+    heightLeft -= pageHeight;
+  }
+
+  const rfqNo = document.getElementById("rfq-no").value.trim() || "phieu-yeu-cau-chao-gia";
+  pdf.save(`${rfqNo}.pdf`);
+}
+
+/* ===================== EXPORT: EXCEL ===================== */
+function exportExcel(){
+  const wb = XLSX.utils.book_new();
+
+  const general = [
+    ["PHIẾU YÊU CẦU CHÀO GIÁ THIẾT KẾ - HỆ THỐNG PCCC"],
+    ["Công ty TNHH Nam Lợi Phát — Our Solutions, Your Success"],
+    [],
+    ["Mã yêu cầu", document.getElementById("rfq-no").value],
+    ["Ngày lập", document.getElementById("rfq-date").value],
+    [],
+    ["I. THÔNG TIN CÔNG TRÌNH & QUY MÔ THIẾT KẾ"],
+    ["Tên dự án", document.getElementById("project-name").value],
+    ["Công năng sử dụng", document.getElementById("project-function").value],
+    ["Địa điểm", document.getElementById("project-address").value],
+    ["Diện tích sàn thi công", document.getElementById("project-area").value],
+    ["Số tầng", document.getElementById("project-floors").value],
+    ["Yêu cầu công việc", document.getElementById("project-scope").value],
+  ];
+  const wsGeneral = XLSX.utils.aoa_to_sheet(general);
+  wsGeneral["!cols"] = [{ wch: 28 }, { wch: 65 }];
+  XLSX.utils.book_append_sheet(wb, wsGeneral, "Thông tin chung");
+
+  // Section II overview
+  const overviewRows = [
+    ["II. CÁC HẠNG MỤC HỆ THỐNG PCCC YÊU CẦU THIẾT KẾ"],
+    [],
+    ["STT", "Hệ thống kỹ thuật", "Nội dung chi tiết phạm vi công việc"]
+  ];
+  document.querySelectorAll(".overview-text").forEach((ta, i) => {
+    overviewRows.push([i + 1, SYSTEMS[i].title.replace(/&amp;/g, "&"), ta.value]);
+  });
+  const wsOverview = XLSX.utils.aoa_to_sheet(overviewRows);
+  wsOverview["!cols"] = [{ wch: 6 }, { wch: 30 }, { wch: 70 }];
+  XLSX.utils.book_append_sheet(wb, wsOverview, "Hạng mục thiết kế");
+
+  // Section III per system pricing
+  SYSTEMS.forEach(sys => {
+    const note = document.getElementById(`note-${sys.id}`).value;
+    const rows = [
+      [sys.title.replace(/&amp;/g, "&")],
+      ["Note - Hệ thống cần làm gì:", note],
+      [],
+      ["Vị trí", "Diện tích (m²)", "Đơn giá đề xuất (VNĐ/m²)", "Ghi chú yêu cầu", "Thành tiền (VNĐ)"]
+    ];
+
+    const table = document.getElementById(`table-${sys.id}`);
+    table.querySelectorAll("tbody tr").forEach(tr => {
+      const location = tr.querySelector('[data-field="location"]').value;
+      const area = parseFloat(tr.querySelector('[data-field="area"]').value) || 0;
+      const price = parseFloat(tr.querySelector('[data-field="price"]').value) || 0;
+      const note2 = tr.querySelector('[data-field="note"]').value;
+      const total = area * price;
+      rows.push([location, area, price, note2, total]);
+    });
+
+    const subtotal = document.getElementById(`subtotal-${sys.id}`).textContent;
+    rows.push([]);
+    rows.push(["", "", "", "Tạm tính", subtotal]);
+
+    const ws = XLSX.utils.aoa_to_sheet(rows);
+    ws["!cols"] = [{ wch: 25 }, { wch: 14 }, { wch: 22 }, { wch: 40 }, { wch: 18 }];
+    const sheetName = sys.title.replace(/&amp;/g, "").replace(/[\\/?*\[\]:]/g, "").slice(0, 31);
+    XLSX.utils.book_append_sheet(wb, ws, sheetName);
+  });
+
+  const grand = document.getElementById("grand-total-value").textContent;
+  const summary = [
+    ["TỔNG HỢP GIÁ TRỊ ĐỀ XUẤT"],
+    [],
+    ["Hệ thống", "Tạm tính (VNĐ)"]
+  ];
+  SYSTEMS.forEach(sys => {
+    const sub = document.getElementById(`subtotal-${sys.id}`).textContent;
+    summary.push([sys.title.replace(/&amp;/g, "&"), sub]);
+  });
+  summary.push([]);
+  summary.push(["TỔNG CỘNG", grand]);
+  const wsSummary = XLSX.utils.aoa_to_sheet(summary);
+  wsSummary["!cols"] = [{ wch: 35 }, { wch: 20 }];
+  XLSX.utils.book_append_sheet(wb, wsSummary, "Tổng hợp");
+
+  const rfqNo = document.getElementById("rfq-no").value.trim() || "phieu-yeu-cau-chao-gia";
+  XLSX.writeFile(wb, `${rfqNo}.xlsx`);
 }
 </script>
 
